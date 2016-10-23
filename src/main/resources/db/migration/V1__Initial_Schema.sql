@@ -1,10 +1,10 @@
 CREATE TABLE person (
-  id bigint auto_increment,
+  id int not null primary key,
   birth_day timestamp,
   email varchar(255) not null,
   name varchar(50) not null,
-  phone_number varchar(255),
-  primary key (id));
+  phone_number varchar(255)
+ );
 
 INSERT INTO person (id,name,birth_day,email) VALUES (1,'Elmo Herring','1991-01-20','dolor.Donec@enimconsequatpurus.net'),(2,'Malcolm Blankenship','1993-06-29','eu.placerat.eget@lacusQuisque.com'),(3,'Jack Prince','1991-06-11','sodales@loremluctusut.edu'),(4,'Hamilton Ortiz','1987-06-14','Aliquam@nec.com'),(5,'Amir Rocha','1987-11-30','Nunc.pulvinar@facilisisSuspendissecommodo.co.uk'),(6,'Tanner Chambers','1988-07-05','ligula@lacusQuisque.net'),(7,'Randall Day','1990-02-17','nisi@consectetuercursus.ca'),(8,'Vladimir Estes','1987-04-10','sed.sapien.Nunc@estcongue.net'),(9,'Hakeem Lambert','1994-01-26','Sed.congue@temporaugue.net'),(10,'Dale Todd','1994-08-17','enim@gravida.org');
 INSERT INTO person (id,name,birth_day,email) VALUES (11,'Tate Velasquez','1987-07-19','Aenean@tristique.ca'),(12,'Basil Pratt','1986-07-19','sit.amet@hendrerit.net'),(13,'Chase Tanner','1988-04-11','consequat@mattisvelitjusto.com'),(14,'Dalton Kane','1994-01-06','arcu.et.pede@nec.com'),(15,'Slade Pickett','1989-12-30','aliquam.eros@Fuscediamnunc.com'),(16,'Donovan Raymond','1991-09-26','ipsum@euaugueporttitor.ca'),(17,'Dane Boyd','1992-01-11','vitae.semper.egestas@elementumloremut.co.uk'),(18,'Moses Kirkland','1991-05-27','Proin@interdumCurabitur.ca'),(19,'Paki William','1988-08-19','arcu.Sed@idlibero.net'),(20,'Keane Marshall','1988-11-21','egestas@cursus.com');

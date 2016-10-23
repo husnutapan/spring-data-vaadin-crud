@@ -6,6 +6,18 @@ For larger applications, consider applying some commonly known design patterns f
 
 As an example for a really easy Vaadin add-on usage, there is Switch add-on added as a dependency and the application uses [wscdn.vaadin.com](https://wscdn.vaadin.com) service to compile and host the widgetset. To make it work in your project, see [this part in pom.xml](https://github.com/mstahv/spring-data-vaadin-crud/blob/master/pom.xml#L100-L112) and [this row](https://github.com/mstahv/spring-data-vaadin-crud/blob/master/src/main/java/crud/Application.java#L11) in your configuration.
 
+
+#Practice 1 -> Docker - linking containers
+
+```
+git clone https://github.com/ahmetoz/spring-data-vaadin-crud.git
+cd spring-data-vaadin-crud
+mvn package
+docker run --name postgres-db -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+docker build -t ahmetoz/spring-data-vaadin-crud .
+docker run -ti --rm --link postgres-db:postgres -p 8090:8080 -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=mysecretpassword ahmetoz/spring-data-vaadin-crud
+```
+
 ## How to play with this example
 
 ### Suggested method
