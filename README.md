@@ -11,6 +11,7 @@ As an example for a really easy Vaadin add-on usage, there is Switch add-on adde
 ```
 git clone https://github.com/ahmetoz/spring-data-vaadin-crud.git
 cd spring-data-vaadin-crud
+git checkout docker-compose
 mvn package
 docker-compose up
 ```
