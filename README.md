@@ -6,55 +6,64 @@ For larger applications, consider applying some commonly known design patterns f
 
 As an example for a really easy Vaadin add-on usage, there is Switch add-on added as a dependency and the application uses [wscdn.vaadin.com](https://wscdn.vaadin.com) service to compile and host the widgetset. To make it work in your project, see [this part in pom.xml](https://github.com/mstahv/spring-data-vaadin-crud/blob/master/pom.xml#L100-L112) and [this row](https://github.com/mstahv/spring-data-vaadin-crud/blob/master/src/main/java/crud/Application.java#L11) in your configuration.
 
-
-#Practice 1 -> Docker - linking containers
+#Dockerize application containers with docker-compose
 
 ```
 git clone https://github.com/ahmetoz/spring-data-vaadin-crud.git
 cd spring-data-vaadin-crud
 mvn package
-docker run --name postgres-db -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-docker build -t ahmetoz/spring-data-vaadin-crud .
-docker run -ti --rm --link postgres-db:postgres -p 8090:8080 -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=mysecretpassword ahmetoz/spring-data-vaadin-crud
+docker-compose up
 ```
 
-## How to play with this example
+#Details..
 
-### Suggested method
-
-* Clone the project
-* Import to your favorite IDE
-* Execute the main method from Application class
-
-### Just execute it with maven
+##Dockerfile
 
 ```
-git clone https://github.com/mstahv/spring-data-vaadin-crud.git
-cd spring-data-vaadin-crud
-mvn spring-boot:run
+FROM openjdk:alpine
+VOLUME /tmp
+ADD target/spring-data-vaadin-crud-0.0.1-SNAPSHOT.jar app.jar
+RUN sh -c 'touch /app.jar'
+EXPOSE 8080
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar","--spring.profiles.active=postgres"]
 ```
 
-### Just create the package and run it
+##docker-compose.yml
+```
+ version: '2'
 
-The built .jar file is auto-runnable, so as you can move it to any computer having java installed and run the app. 
+  services:
+    web:
+      build: .
+      ports:
+        - "8091:8080"
+      networks:
+        - my_network
+      environment:
+        POSTGRES: postgres
+        POSTGRES_USERNAME: postgres
+        POSTGRES_PASSWORD: mysecretword
+
+    postgres:
+      image: postgres
+      networks:
+        - my_network
+      environment:
+        POSTGRES_PASSWORD: mysecretword
+
+  networks:
+    my_network:
+```
+
+##application-postgres.properties
 
 ```
-git clone https://github.com/mstahv/spring-data-vaadin-crud.git
-cd spring-data-vaadin-crud
-mvn package
-java -jar target/spring-data-vaadin-crud-0.0.1-SNAPSHOT.jar
+spring.jpa.database=POSTGRESQL
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:postgresql://postgres:5432/postgres?user=${POSTGRES_USERNAME}&password=${POSTGRES_PASSWORD}
+spring.datasource.driverClassName=org.postgresql.Driver
 ```
 
-### Just deploy it
+with networking docker will not longer set the  **POSTGRES_PORT_5432_TCP_ADDR** variables, etc.
+db name: postgres 
 
-The built jar file is really simple to deploy in modern PaaS services. E.g. if you have existing Bluemix account and are already logged in with your cf (CLI) tools just execute following:
-
-```
-git clone https://github.com/mstahv/spring-data-vaadin-crud.git
-cd spring-data-vaadin-crud
-mvn install
-cf push choose-namefor-your-server-here -p target/*.jar -b https://github.com/cloudfoundry/java-buildpack.git
-
-```
-
-Note, that you can also use the cf push without the java-buildpack, but then you need to downgrade the example to Java 7. Check out the custom "java7" branch for that.
