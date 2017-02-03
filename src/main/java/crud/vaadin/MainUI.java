@@ -58,7 +58,7 @@ public class MainUI extends UI {
     
     @Override
     protected void init(VaadinRequest request) {
-        DisclosurePanel aboutBox = new DisclosurePanel("Spring Boot JPA CRUD example with Vaadin UI", new RichText().withMarkDownResource("/welcome.md"));
+        DisclosurePanel aboutBox = new DisclosurePanel("Spring Boot JPA CRUD example with Vaadin UI");
         setContent(
                 new MVerticalLayout(
                         aboutBox,
